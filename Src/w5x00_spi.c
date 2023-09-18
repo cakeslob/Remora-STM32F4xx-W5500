@@ -70,10 +70,10 @@ void wizchip_reset()
 {
     if(hw.rst.port) {
         HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 0);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, 0);
         HAL_Delay(250);
         HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 1);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, 1);
         HAL_Delay(250);
     }
 }
@@ -102,13 +102,13 @@ void wizchip_spi_initialize(void)
     hw.rst.port = SPI_RST_PORT;
     hw.rst.pin = SPI_RST_PIN;
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
 
-    GPIO_InitStruct.Pin = GPIO_PIN_5;
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);  
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);  
 
     // Configure GPIO pin Output Level
     HAL_GPIO_WritePin(SPI_CS_PORT,SPI_CS_PIN, GPIO_PIN_RESET);
