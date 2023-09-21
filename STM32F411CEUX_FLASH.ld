@@ -36,14 +36,15 @@ _Min_Stack_Size = 0x1000 ;	/* required amount of stack */
 /* Memories definition */
 MEMORY
 {
-  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
+  RAM          (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
   BOOT_FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 16K
-  EEPROM_EMUL(xrw)      : ORIGIN = 0x8004000,   LENGTH = 16K
-  FLASH    (rx)    : ORIGIN = 0x8008000,   LENGTH = 512K - 16K - 16K
+  FLASH         (rx)    : ORIGIN = 0x8008000,   LENGTH = 512K - 16K - 16K
+  NOINIT        (rx)    : ORIGIN = 0x8050000,   LENGTH = 256K
 }
 
-_EEPROM_Emul_Start = ORIGIN(EEPROM_EMUL);
-_EEPROM_Emul_Sector = 1;
+_FLASH_VectorTable = ORIGIN(FLASH);
+JSON_STORAGE_ADDRESS = ORIGIN(NOINIT);
+JSON_UPLOAD_ADDRESS = ORIGIN(NOINIT);
 
 /* Sections */
 SECTIONS
@@ -54,7 +55,13 @@ SECTIONS
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >BOOT_FLASH
+  } >FLASH
+
+      .noinit (NOLOAD):
+  {
+    /* place json in input sections that start with .noinit */
+    KEEP(*(*.noinit*))
+  } > NOINIT
 
   /* The program code and other data into "FLASH" Rom type memory */
   .text :
