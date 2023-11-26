@@ -166,7 +166,8 @@ void spi_init (void)
     if(!init) {
 
 #if SPI_PORT == 1
-    #ifdef BOARD_FLEXI_HAL
+    //#ifdef BOARD_FLEXI_HAL
+    #ifdef SPI1_ALT
         __HAL_RCC_SPI1_CLK_ENABLE();
         __HAL_RCC_DMA2_CLK_ENABLE();
 
