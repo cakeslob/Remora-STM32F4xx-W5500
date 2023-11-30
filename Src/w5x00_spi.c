@@ -68,6 +68,7 @@ static inline void wizchip_deselect(void)
 
 void wizchip_reset()
 {
+    
     if(hw.rst.port) {
         HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 0);
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
@@ -75,6 +76,7 @@ void wizchip_reset()
         HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 1);
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
         HAL_Delay(250);
+        
     }
 }
 

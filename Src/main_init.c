@@ -176,6 +176,30 @@ static void SystemClock_Config(void)
     #define APB2CLKDIV RCC_HCLK_DIV1
     #define FLASH_LATENCY FLASH_LATENCY_5
 
+    #elif defined(BOARD_F446_OCTOPUS)
+
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+    RCC_OscInitTypeDef RCC_OscInitStruct = {
+        .OscillatorType = RCC_OSCILLATORTYPE_HSE,
+        .HSEState = RCC_HSE_ON,
+        .PLL.PLLState = RCC_PLL_ON,
+        .PLL.PLLSource = RCC_PLLSOURCE_HSE,
+        .PLL.PLLM = 6, // Input clock divider (12MHz crystal) = Base clock 1MHz
+        .PLL.PLLN = 180, // Main clock multiplier
+        .PLL.PLLP = 2, // Main clock divider = Main clock 168MHz
+        .PLL.PLLQ = 7, // Special peripheral (USB) clock divider (relative to main clock multiplier) = USB clock 48MHz
+        .PLL.PLLR = 2
+    };
+    #define APB1CLKDIV RCC_HCLK_DIV4
+    #define APB2CLKDIV RCC_HCLK_DIV2
+    #define FLASH_LATENCY FLASH_LATENCY_5
+
+    // Activate the OverDrive to reach the 180 MHz Frequency
+  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
+  {
+    Error_Handler();
+  } 
+
   #else
 
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
