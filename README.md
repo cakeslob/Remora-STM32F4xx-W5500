@@ -23,6 +23,12 @@ Dont know how to use serial monitor.
  - PB5 MOSI
 
 
+# Boards
+- Nucleo : not working
+- Blackpill : not working
+- BTT Octopus 446 : working
+
+
 ------------------------------------------
 
 ![Logo](/readme_images/logo_sm.jpg)
