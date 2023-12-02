@@ -124,8 +124,8 @@ static void SystemClock_Config(void)
         .PLL.PLLM = 16,
         .PLL.PLLN = 360,
         .PLL.PLLP = RCC_PLLP_DIV2,
-        .PLL.PLLQ = 2,
-        .PLL.PLLR = 2
+        .PLL.PLLQ = 7,
+        .PLL.PLLR = 6
     };
 
     #define APB1CLKDIV RCC_HCLK_DIV4
@@ -176,7 +176,7 @@ static void SystemClock_Config(void)
     #define APB2CLKDIV RCC_HCLK_DIV1
     #define FLASH_LATENCY FLASH_LATENCY_5
 
-    #elif defined(BOARD_F446_OCTOPUS)
+  #elif defined(BOARD_F446_OCTOPUS)
 
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
     RCC_OscInitTypeDef RCC_OscInitStruct = {
@@ -190,15 +190,15 @@ static void SystemClock_Config(void)
         .PLL.PLLQ = 7, // Special peripheral (USB) clock divider (relative to main clock multiplier) = USB clock 48MHz
         .PLL.PLLR = 2
     };
-    #define APB1CLKDIV RCC_HCLK_DIV4
-    #define APB2CLKDIV RCC_HCLK_DIV2
-    #define FLASH_LATENCY FLASH_LATENCY_5
+  #define APB1CLKDIV RCC_HCLK_DIV4
+  #define APB2CLKDIV RCC_HCLK_DIV2
 
-    // Activate the OverDrive to reach the 180 MHz Frequency
   if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   } 
+
+    #define FLASH_LATENCY FLASH_LATENCY_4
 
   #else
 
@@ -229,8 +229,9 @@ static void SystemClock_Config(void)
     #define FLASH_LATENCY FLASH_LATENCY_5
 
   #endif
-
+/*
 #elif defined(STM32F429xx)
+
 
     __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
@@ -241,6 +242,25 @@ static void SystemClock_Config(void)
         .PLL.PLLSource = RCC_PLLSOURCE_HSE,
         .PLL.PLLM = (uint32_t)HSE_VALUE / 1000000UL,
         .PLL.PLLN = 336,
+        .PLL.PLLP = RCC_PLLP_DIV2,
+        .PLL.PLLQ = 7
+    };
+
+    #define APB1CLKDIV RCC_HCLK_DIV4
+    #define APB2CLKDIV RCC_HCLK_DIV2
+    #define FLASH_LATENCY FLASH_LATENCY_5
+*/
+#elif defined(BOARD_F429_OCTOPUS)
+
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+    RCC_OscInitTypeDef RCC_OscInitStruct = {
+        .OscillatorType = RCC_OSCILLATORTYPE_HSE,
+        .HSEState = RCC_HSE_ON,
+        .PLL.PLLState = RCC_PLL_ON,
+        .PLL.PLLSource = RCC_PLLSOURCE_HSE,
+        .PLL.PLLM = (uint32_t)HSE_VALUE / 1000000UL,
+        .PLL.PLLN = 360,
         .PLL.PLLP = RCC_PLLP_DIV2,
         .PLL.PLLQ = 7
     };
