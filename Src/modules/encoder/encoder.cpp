@@ -1,4 +1,6 @@
 #include "encoder.h"
+#include "remora.h"
+//#include "../boardconfig.h"
 
 /***********************************************************************
                 MODULE CONFIGURATION AND CREATION FROM JSON     
@@ -19,7 +21,27 @@ void createEncoder()
 
     int mod;
 
-    
+    if (!strcmp(modifier,"Open Drain"))
+    {
+        mod = OPENDRAIN;
+    }
+    else if (!strcmp(modifier,"Pull Up"))
+    {
+        mod = PULLUP;
+    }
+    else if (!strcmp(modifier,"Pull Down"))
+    {
+        mod = PULLDOWN;
+    }
+    else if (!strcmp(modifier,"Pull None"))
+    {
+        mod = PULLNONE;
+    }
+    else
+    {
+        mod = NONE;
+    }
+        
     //ptrProcessVariable[pv]  = &txData.processVariable[pv];
     //ptrInputs = &txData.inputs;
 
@@ -50,8 +72,7 @@ void loadStaticIO()
 *                METHOD DEFINITIONS                                    *
 ************************************************************************/
 
-Encoder::Encoder(volatile float &ptrEncoderCount, std::string ChA, std::string ChB, int modifier) :
-	ptrEncoderCount(&ptrEncoderCount),
+Encoder::Encoder( std::string ChA, std::string ChB, int modifier) :
 	ChA(ChA),
 	ChB(ChB),
     modifier(modifier)
@@ -63,8 +84,7 @@ Encoder::Encoder(volatile float &ptrEncoderCount, std::string ChA, std::string C
 }
 
 //Encoder::Encoder(volatile float &ptrEncoderCount, volatile uint16_t &ptrData, int bitNumber, std::string ChA, std::string ChB, std::string Index, int modifier) :
-Encoder::Encoder(volatile float &ptrEncoderCount, int bitNumber, std::string ChA, std::string ChB, std::string Index, int modifier) :
-    ptrEncoderCount(&ptrEncoderCount),
+Encoder::Encoder( int bitNumber, std::string ChA, std::string ChB, std::string Index, int modifier) :
     bitNumber(bitNumber),
 	ChA(ChA),
 	ChB(ChB),
@@ -113,9 +133,9 @@ void Encoder::update()
         if (this->pinI->get() && (this->pulseCount == 0))    // rising edge on index pulse
         {
             this->indexCount = this->count;                 //  capture the encoder count at the index, send this to linuxCNC for one servo period 
-            *(this->ptrEncoderCount) = this->indexCount;
+            txData->EncoderCount = this->indexCount;
             this->pulseCount = this->indexPulse;        
-            *(this->ptrData) |= this->mask;                 // set bit in data source high
+           currentTxPacket->inputs |= this->mask;                 // set bit in data source high
         }
         else if (this->pulseCount > 0)                      // maintain both index output and encoder count for the latch period
         {
@@ -123,13 +143,13 @@ void Encoder::update()
         }
         else
         {
-            *(this->ptrData) &= ~this->mask;                // set bit in data source low
-            *(this->ptrEncoderCount) = this->count;         // update encoder count
+            currentTxPacket->inputs &= ~this->mask;                // set bit in data source low
+            txData->EncoderCount = this->count;         // update encoder count
         }
     }
     else
     {
-        *(this->ptrEncoderCount) = this->count;             // update encoder count
+        txData->EncoderCount = this->count;             // update encoder count
     }
 }
 

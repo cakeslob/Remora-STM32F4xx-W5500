@@ -2,16 +2,16 @@
 #define ENCODER_H
 
 #include <cstdint>
-#include <iostream>
 #include <string>
 
 #include "configuration.h"
-#include "modules/module.h"
-#include "drivers/pin/pin.h"
 
 #include "extern.h"
+#include "modules/module.h"
+#include "../../drivers/pin/pin.h"
 
 void createEncoder(void);
+void loadStaticStepgen(void);
 
 class Encoder : public Module
 {
@@ -23,11 +23,11 @@ class Encoder : public Module
         
         std::string Index;			// physical pin connection
         bool hasIndex;
-        volatile uint16_t *ptrData; 	// pointer to the data source
+        volatile uint32_t *ptrData; 	// pointer to the data source
 		int bitNumber;				// location in the data source
         int mask;
 
-		volatile float *ptrEncoderCount; 	// pointer to the data source
+		//volatile float *ptrEncoderCount; 	// pointer to the data source
 
         int8_t  modifier;
         uint8_t state;
@@ -42,8 +42,8 @@ class Encoder : public Module
         Pin* pinB;      // channel B
         Pin* pinI;      // index       
 
-		Encoder(volatile float&, std::string, std::string, int);
-        Encoder(volatile float&, volatile uint16_t&, int, std::string, std::string, std::string, int);
+		Encoder( std::string, std::string, int);
+        Encoder( int, std::string, std::string, std::string, int);
 
 		virtual void update(void);	// Module default interface
 };
