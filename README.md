@@ -1,3 +1,5 @@
+Start migration to new stepgen to copmply with new remora component. new stepgen uses raw count instead of accumluator 
+
 # Nucleo/blackpill Remora-STM32F4xx-W5500 test branch. 
 ------------------------------------------
 
@@ -26,7 +28,7 @@ Dont know how to use serial monitor.
 # Boards
 - Nucleo : working , connects to linuxcnc needs more testing
 - Blackpill : working , connects to linuxcnc needs more testing
-- BTT Octopus 446 : broke something, was working , connects to linuxcnc needs more testing 
+- BTT Octopus 446 : working , connects to linuxcnc needs more testing
 
 
 ------------------------------------------
