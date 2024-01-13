@@ -26,8 +26,16 @@ Dont know how to use serial monitor.
 # Boards
 - Nucleo : working , connects to linuxcnc needs more testing
 - Blackpill : working , connects to linuxcnc needs more testing
-- BTT Octopus 446 : broke something, was working , connects to linuxcnc needs more testing 
+- BTT Octopus 446 : working , connects to linuxcnc needs more testing 
 
+
+
+# TO DO and known issues
+
+- Need to fix config loading. Configuration can only be loaded once. When loading the second time, something goes wrong, the memory gets locked/protected and the board returns to default config.
+- PWM and Encoder modules need to be ported. Still a WIP, but I do not know where to point the signals.
+- UART console output needs to be added.
+- Add a platformio.ini define for SPI CS pin
 
 ------------------------------------------
 
