@@ -37,17 +37,17 @@
 #define usartCLKEN(t) usartclken(t)
 #define usartclken(t) __HAL_RCC_USART ## t ## _CLK_ENABLE
 
-#define UART2            usart(3)
-#define UART2_IRQ        usartINT(3)
-#define UART2_IRQHandler usartHANDLER(3)
-#define UART2_CLK_En     usartCLKEN(3)
+#define UART2            usart(1)
+#define UART2_IRQ        usartINT(1)
+#define UART2_IRQHandler usartHANDLER(1)
+#define UART2_CLK_En     usartCLKEN(1)
 
 #define UART2_CLK HAL_RCC_GetPCLK1Freq()
 
-#define UART2_TX_PIN 10
-#define UART2_RX_PIN 5
-#define UART2_PORT GPIOC
-#define UART2_AF GPIO_AF7_USART3
+#define UART2_TX_PIN 9
+#define UART2_RX_PIN 10
+#define UART2_PORT GPIOA
+#define UART2_AF GPIO_AF7_USART1
 
 #define RS485_UDP_PORT 27183
 
