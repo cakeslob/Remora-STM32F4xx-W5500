@@ -34,12 +34,12 @@ SpindlePWM::SpindlePWM(int setpoint)
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	sp = setpoint;
 
-	__HAL_RCC_TIM5_CLK_ENABLE();
+	__HAL_RCC_TIM1_CLK_ENABLE();
 
 	this->prescaler = 60;
 	this->period = 10000;
 
-	this->htim.Instance = TIM5;
+	this->htim.Instance = TIM1;
 	this->htim.Init.Prescaler = this->prescaler-1;
 	this->htim.Init.CounterMode = TIM_COUNTERMODE_UP;
 	this->htim.Init.Period = this->period-1;
@@ -62,14 +62,14 @@ SpindlePWM::SpindlePWM(int setpoint)
 
 	__HAL_RCC_GPIOA_CLK_ENABLE();
 	/**TIM1 GPIO Configuration
-	PA8     ------> TIM1_CH1
+	PB0     ------> TIM1_CH2N
 	*/
-	GPIO_InitStruct.Pin = GPIO_PIN_8;
+	GPIO_InitStruct.Pin = GPIO_PIN_0;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	HAL_TIM_PWM_Start(&this->htim, TIM_CHANNEL_1);
 	TIM5->CCR1 = 0;
