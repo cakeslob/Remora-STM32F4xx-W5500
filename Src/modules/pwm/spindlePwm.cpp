@@ -72,7 +72,7 @@ SpindlePWM::SpindlePWM(int setpoint)
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	HAL_TIM_PWM_Start(&this->htim, TIM_CHANNEL_1);
-	TIM5->CCR1 = 0;
+	TIM1->CCR1 = 0;
 }
 
 
