@@ -38,7 +38,7 @@ MEMORY
 {
   RAM          (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
   BOOT_FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 16K 
-   FLASH         (rx)    : ORIGIN = 0x8008000,   LENGTH = 512K - 16K - 16K 
+  FLASH         (rx)    : ORIGIN = 0x8008000,   LENGTH = 512K - 16K - 16K 
   NOINIT        (rx)    : ORIGIN = 0x8050000,   LENGTH = 256K
 }
 
