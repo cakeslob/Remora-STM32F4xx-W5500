@@ -30,8 +30,7 @@ Dont know how to use serial monitor.
 
 # TO DO and known issues
 
-- Need to fix config loading. Configuration can only be loaded once. When loading the second time, something goes wrong, the memory gets locked/protected and the board returns to default config.
-- PWM and Encoder modules need to be ported. Still a WIP, but I do not know where to point the signals.
+- Encoder modules need to be ported. Still a WIP, but I do not know where to point the signals.
 - UART console output needs to be added.
 - Add a platformio.ini define for SPI CS pin
 
