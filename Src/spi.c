@@ -206,16 +206,14 @@ void spi_init (void)
             .Pull = GPIO_NOPULL,
             .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
             .Alternate = GPIO_AF5_SPI1,
-        };
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-        GPIO_InitTypeDef GPIO_InitStruct = {
             .Pin = GPIO_PIN_2|GPIO_PIN_3,
             .Mode = GPIO_MODE_AF_PP,
             .Pull = GPIO_NOPULL,
             .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
             .Alternate = GPIO_AF5_SPI1,
         };
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
         HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
     #else
