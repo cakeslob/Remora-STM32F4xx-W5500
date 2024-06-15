@@ -12,35 +12,35 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/blackpill_f411ce/firmware.elf",
-            "projectEnvName": "blackpill_f411ce",
+            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/f429_octopus/firmware.elf",
+            "projectEnvName": "f429_octopus",
             "toolchainBinDir": "C:/Users/Lenovo/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F411xx.svd",
+            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F429x.svd",
             "preLaunchTask": {
                 "type": "PlatformIO",
-                "task": "Pre-Debug (blackpill_f411ce)"
+                "task": "Pre-Debug (f429_octopus)"
             }
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/blackpill_f411ce/firmware.elf",
-            "projectEnvName": "blackpill_f411ce",
+            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/f429_octopus/firmware.elf",
+            "projectEnvName": "f429_octopus",
             "toolchainBinDir": "C:/Users/Lenovo/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F411xx.svd"
+            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F429x.svd"
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (without uploading)",
-            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/blackpill_f411ce/firmware.elf",
-            "projectEnvName": "blackpill_f411ce",
+            "executable": "c:/Users/Lenovo/Documents/GitHub/Remora-STM32F4xx-W5500/.pio/build/f429_octopus/firmware.elf",
+            "projectEnvName": "f429_octopus",
             "toolchainBinDir": "C:/Users/Lenovo/.platformio/packages/toolchain-gccarmnoneeabi@1.70201.0/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F411xx.svd",
+            "svdPath": "C:/Users/Lenovo/.platformio/platforms/ststm32/misc/svd/STM32F429x.svd",
             "loadMode": "manual"
         }
     ]
