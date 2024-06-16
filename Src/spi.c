@@ -200,21 +200,31 @@ void spi_init (void)
         __HAL_RCC_SPI2_CLK_ENABLE();
         __HAL_RCC_DMA1_CLK_ENABLE();
 
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+
         GPIO_InitTypeDef GPIO_InitStruct = {
             .Pin = GPIO_PIN_13,
             .Mode = GPIO_MODE_AF_PP,
             .Pull = GPIO_NOPULL,
             .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
-            .Alternate = GPIO_AF5_SPI1,
-
+            .Alternate = GPIO_AF5_SPI2,
+        
             .Pin = GPIO_PIN_2|GPIO_PIN_3,
             .Mode = GPIO_MODE_AF_PP,
             .Pull = GPIO_NOPULL,
             .Speed = GPIO_SPEED_FREQ_VERY_HIGH,
-            .Alternate = GPIO_AF5_SPI1,
+            .Alternate = GPIO_AF5_SPI2,
         };
-        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+            HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+            HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        
+
+       
+
+        
+
+
 
     #else
         __HAL_RCC_SPI2_CLK_ENABLE();

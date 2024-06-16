@@ -14,6 +14,7 @@ void createStepgen()
     printf("\n%s\n",comment);
 
     int joint = module["Joint Number"];
+	const char* enable = module["Enable Pin"];
     const char* step = module["Step Pin"];
     const char* dir = module["Direction Pin"];
 
@@ -23,7 +24,7 @@ void createStepgen()
     //ptrJointEnable = &rxData.jointEnable;
 
     // create the step generator, register it in the thread
-    Module* stepgen = new Stepgen(base_freq, joint, step, dir, STEPBIT);
+    Module* stepgen = new Stepgen(base_freq, joint, enable, step, dir, STEPBIT);
     baseThread->registerModule(stepgen);
     baseThread->registerModulePost(stepgen);
 }
@@ -42,19 +43,21 @@ void loadStaticStepgen()
                 METHOD DEFINITIONS
 ************************************************************************/
 
-Stepgen::Stepgen(int32_t threadFreq, int jointNumber, std::string step, std::string direction, int stepBit) :
+Stepgen::Stepgen(int32_t threadFreq, int jointNumber,std::string enable, std::string step, std::string direction, int stepBit) :
 	jointNumber(jointNumber),
+	enable(enable),
 	step(step),
 	direction(direction),
 	stepBit(stepBit)
 {
+	this->enablePin = new Pin(this->enable, OUTPUT);			// create Pins
 	this->stepPin = new Pin(this->step, OUTPUT);
 	this->directionPin = new Pin(this->direction, OUTPUT);
 	this->DDSaccumulator = 0;
 	this->rawCount = 0;
 	this->frequencyScale = (float)(1 << this->stepBit) / (float)threadFreq;
 	this->mask = 1 << this->jointNumber;
-	this->isEnabled = true;
+	this->isEnabled = false;
 	this->isForward = false;
 	this->lastDir = !this->isForward;
 }
@@ -86,8 +89,9 @@ void Stepgen::makePulses()
 
 	this->isEnabled = ((rxData->jointEnable & this->mask) != 0);
 	
-	if (this->isEnabled == true)       											// this Step generator is enables so make the pulses
+	if (this->isEnabled == true)  											// this Step generator is enables so make the pulses
 	{
+		this->enablePin->set(false);                                			// Enable the driver - CHANGE THIS TO MAKE THE OUTPUT VALUE CONFIGURABLE???
 		this->frequencyCommand = rxData->jointFreqCmd[jointNumber];             // Get the latest frequency command via pointer to the data source
 		this->DDSaddValue = this->frequencyCommand * this->frequencyScale;		// Scale the frequency command to get the DDS add value
 		stepNow = this->DDSaccumulator;                           				// Save the current DDS accumulator value
@@ -124,7 +128,10 @@ void Stepgen::makePulses()
 			this->isStepping = true;
 		}
 	}
-
+	else
+	{
+		this->enablePin->set(true);
+	}
 
 }
 
