@@ -60,7 +60,7 @@ SpindlePWM::SpindlePWM(int setpoint)
 
 	HAL_TIM_PWM_ConfigChannel(&this->htim, &sConfigOC, TIM_CHANNEL_1);
 
-	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
 	/**TIM1 GPIO Configuration
 	PB0     ------> TIM1_CH2N
 	*/
@@ -74,6 +74,9 @@ SpindlePWM::SpindlePWM(int setpoint)
 	HAL_TIM_PWM_Start(&this->htim, TIM_CHANNEL_1);
 	TIM1->CCR1 = 0;
 }
+
+
+
 
 
 
