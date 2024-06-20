@@ -104,11 +104,11 @@ void SpindlePWM::update()
         this->pulse = (uint32_t)((float)this->period*(this->pwmPulseWidth / 100.0));
         if (this->pulse == 0)
         {
-        	TIM5->CCR1 = 0;
+        	TIM1->CCR1 = 0;
         }
         else
         {
-        	TIM5->CCR1 = this->pulse-1;
+        	TIM1->CCR1 = this->pulse-1;
         }
     }
 
