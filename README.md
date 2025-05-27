@@ -3,7 +3,7 @@
 
 Stepgen, blink and digital io are the only modules supported at the moment. 
 
-Default config that loads on startup is an led blink module on PC13
+
 
 Configs are loaded via tftp , refer to the remora documents for this process
 https://remora-docs.readthedocs.io/en/latest/firmware/ethernet-config.html
@@ -15,10 +15,10 @@ Dont know how to use serial monitor.
 # W5500 connection
 
 
- - PA12 SPI CS
- - PB13 SCK
- - PB14  MISO
- - PB15 MOSI
+ - PB6 SPI CS
+ - PA5 SCK
+ - PA6  MISO
+ - PA7 MOSI
 
 
 # Boards
