@@ -248,7 +248,7 @@ void reg_wizchip_bus_cbfunc(iodata_t(*bus_rb)(uint32_t addr), void (*bus_wb)(uin
    }
 }
 
-void reg_wizchip_spi_cbfunc(uint8_t (*spi_rb)(void), void (*spi_wb)(uint8_t wb))
+void reg_wizchip_spi_cbfunc(uint8_t (*spi_rb)(void), uint8_t (*spi_wb)(uint8_t wb))
 {
    while(!(WIZCHIP.if_mode & _WIZCHIP_IO_MODE_SPI_));
    

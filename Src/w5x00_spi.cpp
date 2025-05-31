@@ -12,14 +12,14 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+extern "C" {
 #include "port_common.h"
-
 #include "wizchip_conf.h"
 #include "w5x00_spi.h"
-
 #include "spi.h"
+}
 
-#define USE_SPI_DMA 1
+#include "drivers/pin/pin.h"
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -31,19 +31,16 @@
 #define WIZCHIP_SPI_PRESCALER SPI_BAUDRATEPRESCALER_2
 #endif
 
-typedef struct {
-    GPIO_TypeDef *port;
-    uint16_t pin;
-} st_gpio_t;
-
-static struct {
-    st_gpio_t cs;
-    st_gpio_t rst;
-} hw;
-static uint32_t prescaler = WIZCHIP_SPI_PRESCALER;
-
 static void (*irq_callback)(void);
 static volatile bool spin_lock = false;
+
+// We've abstracted away platform specific logic using the Pin driver
+Pin* wiz_cs_pin = nullptr;
+char wiz_cs_storage[sizeof(Pin)];
+
+Pin* wiz_rst_pin = nullptr;
+char wiz_rst_storage[sizeof(Pin)];
+
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -52,32 +49,23 @@ static volatile bool spin_lock = false;
  */
 static inline void wizchip_select(void)
 {
-    //if(prescaler != WIZCHIP_SPI_PRESCALER)
-    //    prescaler = spi_set_speed(WIZCHIP_SPI_PRESCALER);
-
-    HAL_GPIO_WritePin(hw.cs.port, hw.cs.pin, 0);
+    wiz_cs_pin->set(GPIO_PIN_RESET);
 }
 
 static inline void wizchip_deselect(void)
 {
-    HAL_GPIO_WritePin(hw.cs.port, hw.cs.pin, 1);
-
-    //if(prescaler != WIZCHIP_SPI_PRESCALER)
-    //    spi_set_speed(prescaler);
+    wiz_cs_pin->set(GPIO_PIN_SET);
 }
 
 void wizchip_reset()
 {
     // not sure if needed, doesnt seem to effect using spi1 pa5 sck, unsure what to do. -cakeslob
-    if(hw.rst.port) {
-        HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 0);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
-        HAL_Delay(250);
-        HAL_GPIO_WritePin(hw.rst.port, hw.rst.pin, 1);
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
-        HAL_Delay(250);
-        
-    }
+    wiz_cs_pin->set(GPIO_PIN_RESET);
+    wiz_rst_pin->set(GPIO_PIN_RESET);
+    HAL_Delay(250);                 // Todo - abstract away any HAL_Delays. May need a little driver unit for timing
+    wiz_cs_pin->set(GPIO_PIN_SET);
+    wiz_rst_pin->set(GPIO_PIN_SET);
+    HAL_Delay(250);
 }
 
 
@@ -94,48 +82,25 @@ static void wizchip_critical_section_unlock(void)
 }
 
 void wizchip_spi_initialize(void)
-{    
+{   
+    /* 
+    Your chosen SPI_PORT, WIZ_CS_PORT_AND_PIN and WIZ_RST_PORT_AND_PIN all need to be initialised in your env in platformio.ini, for example. Note the string escape formatting "\" and \""
+    build_flags = 
+        ${common.build_flags}
+        -D SPI_PORT=1
+        -D WIZ_CS_PORT_AND_PIN="\"PB_06\""
+        -D WIZ_RST_PORT_AND_PIN="\"PB_05\""
+    */
+    wiz_cs_pin = new (wiz_cs_storage) Pin(WIZ_CS_PORT_AND_PIN, OUTPUT, NONE); 
+    wiz_rst_pin = new (wiz_rst_storage) Pin(WIZ_RST_PORT_AND_PIN, OUTPUT, NONE);   
 
-    GPIO_InitTypeDef    GPIO_InitStruct = {0};
+    //__HAL_RCC_GPIOB_CLK_ENABLE(); // note to self - we can tell this is initialised in main_init.c, but if anything changes and this stops working at some point we may have a race condition where this port is not initialised until later in the code. 
 
-    hw.cs.port = SPI_CS_PORT;
-    hw.cs.pin = SPI_CS_PIN;
+    // reset the device pre-emptively
+    wizchip_reset();
 
-    hw.rst.port = SPI_RST_PORT;
-    hw.rst.pin = SPI_RST_PIN;
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-
-    GPIO_InitStruct.Pin = GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);  
-
-    // Configure GPIO pin Output Level
-    HAL_GPIO_WritePin(SPI_CS_PORT,SPI_CS_PIN, GPIO_PIN_RESET);
-
-    // Configure the GPIO pin
-    GPIO_InitStruct.Pin = hw.cs.pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(hw.cs.port, &GPIO_InitStruct);  
-
-    // Configure GPIO pin Output Level
-    HAL_GPIO_WritePin(SPI_RST_PORT,SPI_RST_PIN, GPIO_PIN_RESET);
-
-    // Configure the GPIO pin
-    GPIO_InitStruct.Pin = hw.rst.pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(hw.rst.port, &GPIO_InitStruct);
-
-    HAL_GPIO_WritePin(SPI_CS_PORT,SPI_CS_PIN, GPIO_PIN_RESET);
-
-
-
+    // initialise the SPI bus
+    wizchip_select();
     spi_init();
     wizchip_deselect();
     spi_set_speed(WIZCHIP_SPI_PRESCALER);

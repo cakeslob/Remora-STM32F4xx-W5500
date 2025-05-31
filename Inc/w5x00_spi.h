@@ -12,19 +12,12 @@
  * Macros
  * ----------------------------------------------------------------------------------------------------
  */
-/* SPI */
-#define SPI_PORT                1 // GPIOB, SCK_PIN = 3, MISO_PIN = 4, MOSI_PIN = 5  probably needs fixing
-
-#define SPI_CS_PORT             GPIOB //CS_JOG_SW
-#define SPI_CS_PIN              GPIO_PIN_6
-// unsure if these 2 pins are needed, i havent been using them. -cakeslob
-//#define SPI_IRQ_PORT            GPIOC //PRU_RESET
-//#define SPI_IRQ_PIN             GPIO_PIN_3
-#define SPI_RST_PORT            GPIOB // TXD_INT
-#define SPI_RST_PIN             GPIO_PIN_5
-
 /* Use SPI DMA */
-#define USE_SPI_DMA // if you want to use SPI DMA, uncomment.
+#define USE_SPI_DMA 1
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -181,5 +174,9 @@ void network_initialize(wiz_NetInfo net_info);
  *  \param net_info network information.
  */
 void print_network_information(wiz_NetInfo net_info);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _W5X00_SPI_H_ */

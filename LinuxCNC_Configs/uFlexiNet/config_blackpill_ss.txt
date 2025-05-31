@@ -99,7 +99,7 @@
 	{
 	"Thread": "Servo",
 	"Type": "Digital Pin",
-		"Comment":			"OUT1,
+		"Comment":			"OUT1",
 		"Pin":				"PB_1",
 		"Mode":				"Output",
 		"Data Bit":			1

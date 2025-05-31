@@ -28,6 +28,11 @@
 static void SystemClock_Config (void);
 static void MX_GPIO_Init (void);
 static void MX_DMA_Init (void);
+static void MX_USART3_UART_Init(void);
+
+#ifdef NUCLEO_F446
+UART_HandleTypeDef huart3;
+#endif
 
 int main_init(void)
 {
@@ -50,6 +55,10 @@ int main_init(void)
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_DMA_Init();
+
+    #ifdef NUCLEO_F446
+        MX_USART3_UART_Init();  // If using the same pinout as the Flexihal, the Nucleo only has one workable UART port for debug info. Other boards may have more options. 
+    #endif
 
     uint32_t latency;
     RCC_ClkInitTypeDef clock_cfg;
@@ -448,6 +457,22 @@ static void MX_GPIO_Init(void)
 #ifdef GPIOH
   __HAL_RCC_GPIOH_CLK_ENABLE();
 #endif
+}
+
+static void MX_USART3_UART_Init(void)
+{
+    huart3.Instance = USART3;
+    huart3.Init.BaudRate = 115200;
+    huart3.Init.WordLength = UART_WORDLENGTH_8B;
+    huart3.Init.StopBits = UART_STOPBITS_1;
+    huart3.Init.Parity = UART_PARITY_NONE;
+    huart3.Init.Mode = UART_MODE_TX_RX;
+    huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+    if (HAL_UART_Init(&huart3) != HAL_OK)
+    {
+      Error_Handler();
+    }
 }
 
 static void MX_DMA_Init (void)

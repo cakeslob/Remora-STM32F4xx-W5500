@@ -80,7 +80,65 @@ void HAL_MspInit(void)
 }
 
 /* USER CODE BEGIN 1 */
+#ifdef NUCLEO_F446
+/**
+  * @brief UART MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param huart: UART handle pointer
+  * @retval None
+  */
+void HAL_UART_MspInit(UART_HandleTypeDef* huart)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+    if(huart->Instance==USART3)
+    {
+        __HAL_RCC_USART3_CLK_ENABLE();
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        /**USART3 GPIO Configuration
+        PC5     ------> USART3_RX
+        PC10     ------> USART3_TX
+        */
+        GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_10;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+        HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    }
+}
+
+/**
+  * @brief UART MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param huart: UART handle pointer
+  * @retval None
+  */
+void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
+{
+    if(huart->Instance==USART3)
+    {
+        /* Peripheral clock disable */
+        __HAL_RCC_USART3_CLK_DISABLE();
+
+        /**USART3 GPIO Configuration
+        PC5     ------> USART3_RX
+        PC10     ------> USART3_TX
+        */
+        HAL_GPIO_DeInit(GPIOC, GPIO_PIN_5|GPIO_PIN_10);
+    }
+}
+
+/* 
+Project uses NewLib Nano for C-Standard library, however the printf function wasn't ported over. 
+Unsure of performance cost, perhaps best if we implement a debug flag so as to disable this. 
+Or just refactor the code base to directly transmit to UART */
+
+int _write(int file, char *ptr, int len) {
+    HAL_UART_Transmit(&huart3, (uint8_t*) ptr, len, HAL_MAX_DELAY);
+    return len;
+}
+#endif
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

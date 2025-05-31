@@ -492,7 +492,7 @@ void reg_wizchip_bus_cbfunc(iodata_t (*bus_rb)(uint32_t addr), void (*bus_wb)(ui
  *or register your functions.
  *@note If you do not describe or register, null function is called.
  */
-void reg_wizchip_spi_cbfunc(uint8_t (*spi_rb)(void), void (*spi_wb)(uint8_t wb));
+void reg_wizchip_spi_cbfunc(uint8_t (*spi_rb)(void), uint8_t (*spi_wb)(uint8_t wb));
 
 /**
  *@brief Registers call back function for SPI interface.
