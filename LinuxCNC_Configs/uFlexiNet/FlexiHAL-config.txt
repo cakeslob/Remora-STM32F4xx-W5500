@@ -30,7 +30,7 @@
 		"Comment":			"Z - Joint 2 step generator",
 		"Joint Number":		2,
 		"Step Pin": 		"PB_8",
-		"Direction Pin": 	"PC15"
+		"Direction Pin": 	"PC_15"
 	},
 	{
 	"Thread": "Servo",
