@@ -2,6 +2,7 @@
 ------------------------------------------
 
 Stepgen, blink and digital io are the only modules supported at the moment. 
+This firmware is intended for 3d printer boards that have a different enable on each stepstick, and the enable pin is part of the stepgen module inline with main remora
 
 Default config that loads on startup is an led blink module on PA8
 
