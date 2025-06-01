@@ -3,6 +3,8 @@
 
 Stepgen, blink and digital io are the only modules supported at the moment. 
 
+This version of Remora does not have the stepgen enable pin as part of the Remora stepgen module. No stepgen enable pin entry is used in the config file, and the stepgen enable is controlled by LinuxCNC Hal file and a digitalIO output pin you must configure. This is different behavior than standard Remora and is intended to be used with several motor drivers connected by 1 enable pin. 
+
 
 
 Configs are loaded via tftp , refer to the remora documents for this process
@@ -10,7 +12,6 @@ https://remora-docs.readthedocs.io/en/latest/firmware/ethernet-config.html
 
 Board will not start to blink until ethernet connection is established. 
 
-Dont know how to use serial monitor. 
 
 # W5500 connection
 
@@ -31,8 +32,8 @@ Dont know how to use serial monitor.
 # TO DO and known issues
 
 - PWM/Encoder modules need to be ported. Still a WIP, but I do not know where to point the signals.
-- UART console output needs to be added.
-- Add a platformio.ini define for SPI CS pin
+
+
   
 
 ------------------------------------------
